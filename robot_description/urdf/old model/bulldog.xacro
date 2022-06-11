@@ -1,0 +1,521 @@
+<?xml version="1.0"?>
+<robot 
+	name="bulldog" xmlns:xacro="http://ros.org/wiki/xacro">  
+
+<!-- ################# Defining the colors used in this robot ################# -->
+
+	<material name="black">
+		<color rgba="0 0 0 1.0"/>
+	</material>
+	<material name="flat_black">
+		<color rgba="0.1 0.1 0.1 1.0"/>
+	</material>
+	<material name="dark_grey">
+		<color rgba="0.175 0.175 0.175 1.0"/>
+	</material>
+	<material name="grey">
+		<color rgba="0.3 0.3 0.3 1" />
+	</material>
+
+<!-- ################# base_footprint ################# -->
+
+	<link name="base_footprint">
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<box size="0.001 0.001 0.001" />
+			</geometry>
+		</visual>
+	</link>
+
+<!-- ################# base_link ################# -->
+
+	<link name="base_link">
+		<!-- <inertial>
+			<mass value="1" />
+			<origin xyz="0 0 0.1" />
+			<inertia ixx="0.05" ixy="0" ixz="0" iyy="0.05" iyz="0" izz="0.2" />
+		</inertial> -->
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<geometry>
+				<mesh filename="package://robots_description/meshes/bulldog/base_link.stl"/>
+			</geometry>
+			<material name="flat_black"/>
+		</visual>
+		<collision>
+			<origin xyz="0 0 0.1625" rpy="0 0 0"/>
+			<geometry>
+				<box size="0.85 0.42 0.325"/>
+			</geometry>
+		</collision>
+	</link>
+
+<!-- &&&&&&&&&&&&&&&&& base_footprint_joint &&&&&&&&&&&&&&&&& -->
+
+	<joint name="base_footprint_joint" type="fixed">
+		<origin xyz="0 0 0.1407" rpy="0 0 0" /> 
+		<parent link="base_footprint"/>
+		<child link="base_link" />
+	</joint>
+
+<!-- ################# inertial_link ################# -->
+
+	<link name="inertial_link">
+		<inertial>
+			<mass value="40" />
+			<origin xyz="0 0 0.1" />
+			<inertia ixx="0.7" ixy="-0.03" ixz="-0.15" iyy="2" iyz="-0.01" izz="4" />
+		</inertial>
+	</link>
+	<joint name="inertial_joint" type="fixed">
+		<origin xyz="0 0 0" rpy="0 0 0" />
+		<parent link="base_link" />
+		<child link="inertial_link" />
+	</joint>
+
+<!-- ################# top_plate_link ################# -->
+
+	<link name="top_plate_link">
+		<!-- <inertial>
+			<mass value="5" />
+			<origin xyz="0 0 0.1" />
+			<inertia ixx="0.5" ixy="0" ixz="0" iyy="0.5" iyz="0" izz="1" />
+		</inertial> -->
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://robots_description/meshes/bulldog/top_plate.stl" />
+			</geometry>
+			<material name="grey" />
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://robots_description/meshes/bulldog/top_plate.stl" />
+			</geometry>
+		</collision>
+	</link>
+	<joint name="top_plate_joint" type="fixed">
+		<origin xyz="0.07937 0 0.253" rpy="0 0 0" />
+		<parent link="base_link" />
+		<child link="top_plate_link" />
+	</joint>
+
+<!-- ################# rslidar ################# -->
+
+	<link name="rslidar_link">
+		<origin xyz="0 0 0" rpy="0 0 0"/>
+		<visual>
+			<geometry>
+				<mesh filename="package://robots_description/meshes/rslidar/rslidar.dae" />
+			</geometry>
+			<material name="black"/>
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<geometry>
+				<mesh filename="package://robots_description/meshes/rslidar/rslidar.stl" />
+			</geometry>
+		</collision>
+		<inertial>
+			<mass value="0.564" />
+			<origin xyz="0 0 0" />
+			<inertia ixx="0.003881243" ixy="0.0" ixz="0.0" iyy="0.000498940" iyz="0.0" izz="0.003879257" />
+		</inertial>
+	</link>
+
+	<joint name="rslidar_joint" type="fixed">
+		<origin xyz="0.45 0 0.2" rpy="0 0 0" />
+		<parent link="base_link" />
+		<child link="rslidar_link" />
+		<axis xyz="0 1 0"/>
+	</joint>
+
+<!-- ################# left_front_wheel_link ################# -->
+
+	<link name="left_front_wheel_link">
+		<inertial>
+			<mass value="3"/>
+			<origin xyz="0 0 0"/>
+			<inertia  ixx="0.025" ixy="0" ixz="0" iyy="0.025" iyz="0" izz="0.045" />
+		</inertial>
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<geometry>
+				<mesh filename="package://robots_description/meshes/bulldog/wheel.stl"/>
+			</geometry>
+			<material name="dark_grey" />
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="1.5707963267949 0 0"/>
+			<geometry>
+				<cylinder length="0.142" radius="0.183" />
+			</geometry>
+		</collision>
+	</link>
+
+<!-- &&&&&&&&&&&&&&&&& left_front_wheel_joint &&&&&&&&&&&&&&&&& -->
+
+	<joint name="left_front_wheel_joint" type="continuous">
+		<parent link="base_link"/>
+		<child link="left_front_wheel_link"/>
+		<origin xyz="0.27937 0.285 0.0435" rpy="0 0 0"/>
+		<axis xyz="0 1 0" rpy="0 0 0"/>
+		<limit effort="100" velocity="100"/> 
+		<joint_properties damping="0.0" friction="0.0"/>
+	</joint>
+
+<!-- ################# right_front_wheel_link ################# -->
+
+	<link name="right_front_wheel_link">
+		<inertial>
+			<mass value="3"/>
+			<origin xyz="0 0 0"/>
+			<inertia  ixx="0.025" ixy="0" ixz="0" iyy="0.025" iyz="0" izz="0.045" />
+		</inertial>
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<geometry>
+				<mesh filename="package://robots_description/meshes/bulldog/wheel.stl"/>
+			</geometry>
+			<material name="dark_grey" />
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="1.5707963267949 0 0"/>
+			<geometry>
+				<cylinder length="0.142" radius="0.183" />
+			</geometry>
+		</collision>
+	</link>
+
+<!-- &&&&&&&&&&&&&&&&& right_front_wheel_joint &&&&&&&&&&&&&&&&& -->
+
+	<joint name="right_front_wheel_joint" type="continuous">
+		<parent link="base_link"/>
+		<child link="right_front_wheel_link"/>
+		<origin xyz="0.27937 -0.285 0.0435" rpy="0 0 0"/>
+		<axis xyz="0 1 0" rpy="0 0 0"/>
+		<limit effort="100" velocity="100"/> 
+		<joint_properties damping="0.0" friction="0.0"/>
+	</joint>
+
+<!-- ################# left_rear_wheel_link ################# -->
+
+	<link name="left_rear_wheel_link">
+		<inertial>
+			<mass value="3"/>
+			<origin xyz="0 0 0"/>
+			<inertia  ixx="0.025" ixy="0" ixz="0" iyy="0.025" iyz="0" izz="0.045" />
+		</inertial>
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<geometry>
+				<mesh filename="package://robots_description/meshes/bulldog/wheel.stl"/>
+			</geometry>
+			<material name="dark_grey" />
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="1.5707963267949 0 0"/>
+			<geometry>
+				<cylinder length="0.142" radius="0.183" />
+			</geometry>
+		</collision>
+	</link>
+
+<!-- &&&&&&&&&&&&&&&&& left_rear_wheel_joint &&&&&&&&&&&&&&&&& -->
+
+	<joint name="left_rear_wheel_joint" type="continuous">
+		<parent link="base_link"/>
+		<child link="left_rear_wheel_link"/>
+		<origin xyz="-0.27937 0.285 0.0435" rpy="0 0 0"/>
+		<axis xyz="0 1 0" rpy="0 0 0"/>
+		<limit effort="100" velocity="100"/> 
+		<joint_properties damping="0.0" friction="0.0"/>
+	</joint>
+
+<!-- ################# right_rear_wheel_link ################# -->
+
+	<link name="right_rear_wheel_link">
+		<inertial>
+			<mass value="3"/>
+			<origin xyz="0 0 0"/>
+			<inertia  ixx="0.025" ixy="0" ixz="0" iyy="0.025" iyz="0" izz="0.045" />
+		</inertial>
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<geometry>
+				<mesh filename="package://robots_description/meshes/bulldog/wheel.stl"/>
+			</geometry>
+			<material name="dark_grey" />
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="1.5707963267949 0 0"/>
+			<geometry>
+				<cylinder length="0.142" radius="0.183" />
+			</geometry>
+		</collision>
+	</link>
+
+<!-- &&&&&&&&&&&&&&&&& right_rear_wheel_joint &&&&&&&&&&&&&&&&& -->
+
+	<joint name="right_rear_wheel_joint" type="continuous">
+		<parent link="base_link"/>
+		<child link="right_rear_wheel_link"/>
+		<origin xyz="-0.27937 -0.285 0.0435" rpy="0 0 0"/>
+		<axis xyz="0 1 0" rpy="0 0 0"/>
+		<limit effort="100" velocity="100"/> 
+		<joint_properties damping="0.0" friction="0.0"/>
+	</joint>
+
+<!-- ################# installation_plate_link ################# -->
+
+    <link name="installation_plate_link">
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://robots_description/meshes/bulldog/installation_plate.stl" />
+			</geometry>
+			<material name="black" />
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://robots_description/meshes/bulldog/installation_plate.stl" />
+			</geometry>
+		</collision>
+    </link>
+
+	<joint name="installation_plate_joint" type="fixed">
+		<parent link="base_link"/>
+		<child link="installation_plate_link"/>
+		<origin xyz="0.197 0 0.314" rpy="0 0 0" />
+	</joint>
+
+<!-- ################# base_footprint ################# -->
+
+	<link name="laser_link" />
+	<joint name="laser_joint" type="fixed">
+		<origin xyz="0.05 0 -0.2" rpy="0 0 0" /> 
+		<parent link="rslidar_link"/>
+		<child link="laser_link" />
+	</joint>
+
+	<link name="box_link">
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<geometry>
+				<box size="0.3 0.4 0.15"/>
+			</geometry>
+		</collision>
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<geometry>
+				<box size="0.3 0.4 0.15"/>
+			</geometry>
+			<material name="grey" />
+		</visual>
+		<inertial>
+			<mass value="10" />
+			<origin xyz="0 0 0" rpy="0 0 0"/>
+			<inertia ixx="0.5" ixy="0" ixz="0" iyy="0.5" iyz="0" izz="0.5" />
+		</inertial>
+	</link>
+
+	<joint name="box_joint" type="fixed">
+		<axis xyz="0 1 0" />
+		<origin xyz="-0.1 0 0.395" rpy="0 0 0"/>
+		<parent link="base_link"/>
+		<child link="box_link"/>
+	</joint>
+
+<!-- //////////////////////   Gazebo parameters  ////////////////////// -->
+
+	<!-- base_link -->
+	<gazebo reference="base_link">
+		<material>Gazebo/FlatBlack</material>
+	</gazebo>
+
+	<!-- top_plate_link -->
+	<gazebo reference="top_plate_link">
+		<material>Gazebo/Grey</material>
+	</gazebo>
+
+	<!-- rslidar_link -->
+	<gazebo reference="rslidar_link">
+		<material>Gazebo/DarkGrey</material>
+	</gazebo>
+
+	<!-- installation_plate_link -->
+	<gazebo reference="installation_plate_link">
+		<material>Gazebo/Black</material>
+	</gazebo>
+
+	<!-- left_front_wheel_link -->
+	<gazebo reference="left_front_wheel_link">
+		<mu1 value="1.0"/>
+		<mu2 value="1.0"/>
+		<kp value="10000000.0" />
+		<kd value="1.0" />
+		<fdir1 value="1 0 0"/>
+		<material>Gazebo/DarkGrey</material>
+	</gazebo>
+
+	<!-- right_front_wheel_link -->
+	<gazebo reference="right_front_wheel_link">
+		<mu1 value="1.0"/>
+		<mu2 value="1.0"/>
+		<kp value="10000000.0" />
+		<kd value="1.0" />
+		<fdir1 value="1 0 0"/>
+		<material>Gazebo/DarkGrey</material>
+	</gazebo>
+
+	<!-- left_rear_wheel_link -->
+	<gazebo reference="left_rear_wheel_link">
+		<mu1 value="1.0"/>
+		<mu2 value="1.0"/>
+		<kp value="10000000.0" />
+		<kd value="1.0" />
+		<fdir1 value="1 0 0"/>
+		<material>Gazebo/DarkGrey</material>
+	</gazebo>
+
+	<!-- right_rear_wheel_link -->
+	<gazebo reference="right_rear_wheel_link">
+		<mu1 value="1.0"/>
+		<mu2 value="1.0"/>
+		<kp value="10000000.0" />
+		<kd value="1.0" />
+		<fdir1 value="1 0 0"/>
+		<material>Gazebo/DarkGrey</material>
+	</gazebo>
+
+<!-- //////////////////////   Transmissions  ////////////////////// -->
+
+	<xacro:macro name="bulldog_transmission" params="wheel_joint">
+		<transmission name="${wheel_joint}_trans">
+			<type>transmission_interface/SimpleTransmission</type>
+			<actuator name="${wheel_joint}_motor">
+				<mechanicalReduction>1</mechanicalReduction>
+			</actuator>
+			<joint name="${wheel_joint}" >
+				<hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+			</joint>
+		</transmission>
+	</xacro:macro>
+    
+	<xacro:bulldog_transmission wheel_joint="left_front_wheel_joint"/>
+	<xacro:bulldog_transmission wheel_joint="right_front_wheel_joint"/>
+	<xacro:bulldog_transmission wheel_joint="left_rear_wheel_joint"/>
+	<xacro:bulldog_transmission wheel_joint="right_rear_wheel_joint"/>
+
+<!-- //////////////////////   gazebo plugin  ////////////////////// -->
+
+	<!-- <gazebo>
+		<plugin name="skid_steer_drive_controller" filename="libgazebo_ros_skid_steer_drive.so">
+			<updateRate>50.0</updateRate>
+			<robotNamespace></robotNamespace>
+			<leftFrontJoint>left_front_wheel_joint</leftFrontJoint>
+			<leftRearJoint>left_rear_wheel_joint</leftRearJoint>
+			<rightFrontJoint>right_front_wheel_joint</rightFrontJoint>
+			<rightRearJoint>right_rear_wheel_joint</rightRearJoint>
+			<wheelSeparation>4</wheelSeparation>
+			<wheelDiameter>0.1</wheelDiameter>
+			<commandTopic>cmd_vel</commandTopic>
+			<odometryTopic>odom</odometryTopic>
+			<robotBaseFrame>base_footprint</robotBaseFrame>
+			<odometryFrame>odom</odometryFrame>
+			<torque>1</torque>
+			<topicName>cmd_vel</topicName>
+			<broadcastTF>1</broadcastTF>
+		</plugin>
+	</gazebo> -->
+
+	<!-- <gazebo>
+		<plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
+			<legacyMode>false</legacyMode>
+			<alwaysOn>true</alwaysOn>
+			<updateRate>1000.0</updateRate>
+			<leftJoint>left_front_wheel_joint, left_rear_wheel_joint</leftJoint>
+			<rightJoint>right_front_wheel_joint, right_rear_wheel_joint</rightJoint>
+			<wheelSeparation>0.57</wheelSeparation>
+			<wheelDiameter>0.366</wheelDiameter>
+			<wheelTorque>10</wheelTorque>
+			<publishTf>1</publishTf>
+			<odometryFrame>map</odometryFrame> 
+			<commandTopic>cmd_vel</commandTopic>
+			<odometryTopic>odom</odometryTopic>
+			<robotBaseFrame>base_footprint</robotBaseFrame>
+			<wheelAcceleration>2.8</wheelAcceleration>
+			<publishWheelJointState>true</publishWheelJointState>
+			<publishWheelTF>false</publishWheelTF>
+			<odometrySource>world</odometrySource>
+			<rosDebugLevel>Debug</rosDebugLevel>
+			<publishOdomTF>true</publishOdomTF>
+			<broadcastTF>1</broadcastTF>
+		</plugin>
+	</gazebo> -->
+
+	<!-- <gazebo>
+		<plugin name="ros_control" filename="libgazebo_ros_control.so">
+			<robotNamespace>/</robotNamespace>
+			<robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+			<legacyModeNS>true</legacyModeNS>
+		</plugin>
+	</gazebo> -->
+
+  <gazebo>
+    <plugin name="imu_controller" filename="libhector_gazebo_ros_imu.so">
+      <robotNamespace>/</robotNamespace>
+      <updateRate>50.0</updateRate>
+      <bodyName>base_footprint</bodyName>
+      <topicName>imu/data</topicName>
+      <accelDrift>0.005 0.005 0.005</accelDrift>
+      <accelGaussianNoise>0.005 0.005 0.005</accelGaussianNoise>
+      <rateDrift>0.005 0.005 0.005 </rateDrift>
+      <rateGaussianNoise>0.005 0.005 0.005 </rateGaussianNoise>
+      <headingDrift>0.005</headingDrift>
+      <headingGaussianNoise>0.005</headingGaussianNoise>
+    </plugin>
+  </gazebo>
+
+<!-- &&&&&&&&&&&&&&&&& rslidar plugin &&&&&&&&&&&&&&&&& -->
+
+	<gazebo reference="laser_link">
+		<sensor type="ray" name="laser">
+			<pose>0 0 0 0 0 0</pose>
+			<visualize>true</visualize>
+			<update_rate>40</update_rate>
+			<ray>
+				<scan>
+					<horizontal>
+						<samples>720</samples>
+						<resolution>1</resolution>
+						<min_angle>-1.5707963268</min_angle>
+						<max_angle>1.5707963268</max_angle>
+					</horizontal>
+				</scan>
+				<range>
+					<min>0.10</min>
+					<max>10.0</max>
+					<resolution>0.01</resolution>
+				</range>
+				<noise>
+					<type>gaussian</type>
+					<mean>0.0</mean>
+					<stddev>0.01</stddev>
+				</noise>
+			</ray>
+			<plugin name="rslidar_gazebo" filename="libgazebo_ros_laser.so">
+				<topicName>/scan</topicName>
+				<frameName>laser_link</frameName>
+			</plugin>
+
+		</sensor>
+	</gazebo>
+
+</robot>
+
+
+

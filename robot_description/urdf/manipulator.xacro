@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="manipulator">
+  <xacro:include filename="$(find robots_description)/robots/bulldog.xacro"/>
+  <xacro:include filename="$(find robots_description)/robots/panda_arm_hand.xacro"/>
+
+<!-- ################# panda_base_link ################# -->
+
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/</robotNamespace>
+      <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+      <legacyModeNS>true</legacyModeNS>
+    </plugin>
+  </gazebo>
+
+</robot>
